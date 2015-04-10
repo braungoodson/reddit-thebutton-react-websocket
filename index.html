@@ -1,0 +1,80 @@
+<!doctype html><html><head>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.8.0/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.8.0/JSXTransformer.js"></script>
+
+</head><body>
+
+<div id="app"></div>
+
+<script type="text/jsx">
+  /** @jsx React.DOM */
+  var data = {
+    state: 'loading...',
+    error: 'undefined',
+    socket: 'undefined',
+    participants_text: 'undefined',
+    tick_mac: 'undefined',
+    seconds_left: 'undefined'
+  };
+  var App = React.createClass({
+    update: function() {
+      this.setState({data:data});
+    },
+    getInitialState: function() {
+      var self = this;
+      data.state = 'initializing';
+      self.update();
+      $.ajax('http://localhost:9001',{
+        complete: function(ro) {
+          data.state = 'proxying';
+          self.update();
+          ro.promise().then(function(rs){
+            data.state = 'negotiating';
+            self.update();
+            var url = rs.match(/wss(.*?)[0-9]{10}/g)[0];
+            var socket = new WebSocket(url);
+            socket.onerror = function(error) {
+              data.state = 'error';
+              data.error = error;
+              data.socket = 'error';
+              self.update();
+              throw new Error(error);
+            };
+            socket.onopen = function() {
+              data.state = 'final';
+              data.error = 'none';
+              data.socket = 'open';
+              self.update();
+            };
+            socket.onmessage = function(message) {
+              var d = JSON.parse(message.data);
+              data = $.extend(data,d.payload);
+              self.update();
+            };
+          });
+        }
+      });
+      return {data:data};
+    },
+    render: function() {
+      return (
+        <span>
+          <pre>state: {this.state.data.state}</pre>
+          <pre>error: {this.state.data.error}</pre>
+          <pre>socket: {this.state.data.socket}</pre>
+          <pre>participants_text: {this.state.data.participants_text}</pre>
+          <pre>tick_mac: {this.state.data.tick_mac}</pre>
+          <pre>seconds_left: {this.state.data.seconds_left}</pre>
+        </span>
+      );
+    }
+  });
+  React.renderComponent(
+    <App />,
+    document.getElementById('app')
+  );
+</script>
+
+</body></html>

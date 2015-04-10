@@ -1,0 +1,28 @@
+{
+  "name": "reddit-thebutton-react-websocket",
+  "version": "0.2.0",
+  "description": "example web client consuming reddit websocket with reactjs",
+  "main": "proxy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/braungoodson/reddit-thebutton-react-websocket"
+  },
+  "keywords": [
+    "reddit",
+    "thebutton",
+    "reactjs",
+    "react",
+    "websockets",
+    "nodejs",
+    "node"
+  ],
+  "author": "braun goodson <braungoodson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/braungoodson/reddit-thebutton-react-websocket/issues"
+  },
+  "homepage": "https://github.com/braungoodson/reddit-thebutton-react-websocket"
+}
