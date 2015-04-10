@@ -4,6 +4,7 @@
   "description": "example web client consuming reddit websocket with reactjs",
   "main": "proxy.js",
   "scripts": {
+    "start": "node proxy.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
